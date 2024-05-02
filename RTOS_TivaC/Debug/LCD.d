@@ -11,7 +11,7 @@ LCD.obj: C:/ti/ccs1240/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/sys/_typ
 LCD.obj: C:/ti/ccs1240/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/machine/_types.h
 LCD.obj: C:/ti/ccs1240/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/machine/_stdint.h
 LCD.obj: C:/ti/ccs1240/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/sys/_stdint.h
-LCD.obj: ../Timer1A.h
+LCD.obj: ../Timer0A.h
 LCD.obj: ../SSI2.h
 LCD.obj: ../LCD.h
 LCD.obj: ../tm4c123gh6pm.h
@@ -38,7 +38,7 @@ C:/ti/ccs1240/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/machine/_stdint.h
 
 C:/ti/ccs1240/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/sys/_stdint.h:
 
-../Timer1A.h:
+../Timer0A.h:
 
 ../SSI2.h:
 

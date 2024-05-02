@@ -14,6 +14,10 @@
 
 uint32_t sysClkFreq1 = 80000000; // Assume 80 MHz clock by default
 
+extern volatile uint32_t TIN;
+
+extern volatile uint32_t Slicecount;
+
 // Set clock freq. so Timer1A_Wait10ms delays for exactly 10 ms if clock is not 80 MHz
 void Timer1A_Init( uint32_t clkFreq ){
   sysClkFreq1 = clkFreq / 200;
@@ -45,8 +49,9 @@ void Timer1A_Init( uint32_t clkFreq ){
 
   return;
 }
-
 volatile uint8_t currentDigit = 0;
+volatile uint8_t displayValues[] = {1, 2, 3, 4};
+volatile uint8_t displayState = 0;
 
 void Timer1A_Handler(void)
 {
@@ -66,17 +71,30 @@ void Timer1A_Handler(void)
   // Clear the interrupt flag
   TIMER1_ICR_R = TIMER_ICR_TATOCINT;
 
-  // Write the digit pattern to the seven-segment display
-  const static unsigned char digitPattern[] = {0xC0, 0xF9, 0xA4, 0xB0, 0x99, 0x92, 0x82, 0xF8, 0x80, 0x90};
-  SSI2_write(digitPattern[currentDigit], 0x80);
-  SSI2_write(digitPattern[currentDigit], 0x80);
+  // // Write the digit pattern to the seven-segment display
+  // displayDigit(displayValues[currentDigit], currentDigit);
 
-  // Select the next digit
-  currentDigit = (currentDigit + 1) % 10;
+  // // Select the next digit
+  // currentDigit = (currentDigit + 1) % 4;
+
+  // // testing to see if a number can be displayed on the left most 7-segment display first and then have the slicecount displayed on the right most 7-segment display
+  // displayDigit(1, 0);
+
+  // // show Slicecount on right most 7-segment display 
+  // displayDigit(Slicecount % 10, 3);
+
+   if (displayState == 0) {
+    // show number 1 on left most 7-segment display
+    displayDigit(1, 0);
+    displayState = 1;
+  } else {
+    // show Slicecount on right most 7-segment display
+    displayDigit(Slicecount % 10, 3);
+    displayState = 0;
+  }
 
   // Reload Timer1A to generate the next interrupt
   TIMER1_TAILR_R = sysClkFreq1;
-
 }
 
 // Time delay using busy wait

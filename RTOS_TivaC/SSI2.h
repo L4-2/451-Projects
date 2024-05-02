@@ -18,4 +18,8 @@ void SSI2_init(void);
 // waits for transmit to complete, and deasserts chip select (using mask)
 void SSI2_write( uint8_t data, uint8_t csMask );
 
+
+// helper function to display a digit on the 7-segment display
+void displayDigit( uint8_t digit, uint8_t display );
+
 #endif

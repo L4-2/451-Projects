@@ -41,3 +41,20 @@ void SSI2_write( uint8_t data, uint8_t csMask ) {
   while (SSI2_SR_R & 0x10) {}    // wait for transmit done
   GPIO_PORTC_DATA_R |= csMask;   // deassert chip select
 }
+
+void displayDigit(uint8_t digit, uint8_t display)
+{
+
+  // translate from digit to 7-segment code
+  const static unsigned char digitPattern[] = {0xC0, 0xF9, 0xA4, 0xB0, 0x99, 0x92, 0x82, 0xF8, 0x80, 0x90};
+
+  // translate from display to 7-segment display to enable
+  const static unsigned char displayEnable[] = {0x08, 0x04, 0x02, 0x01};
+
+  // since 7Sdisplay works by using 2 shift registers, digit to display must be sent first
+  SSI2_write(digitPattern[digit], 0x80);
+
+  // now select the display to output to
+  SSI2_write(displayEnable[display], 0x80);
+
+}

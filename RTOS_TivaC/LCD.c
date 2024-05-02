@@ -20,7 +20,7 @@
  */
 
 #include <stdint.h>
-#include "Timer1A.h"
+#include "Timer0A.h"
 #include "SSI2.h"
 #include "LCD.h"
 #include "tm4c123gh6pm.h"
@@ -69,16 +69,16 @@ void LCD_init(void) {
   GPIO_PORTC_DIR_R |= 0x40;         // set PORTC6 as output for CS
   GPIO_PORTC_DEN_R |= 0x40;         // set PORTC6 as digital pins
 
-  Timer1A_Wait1ms(20);        // LCD controller reset sequence
+  Timer0A_Wait1ms(20);        // LCD controller reset sequence
   LCD_nibble_write(0x30, 0);
-  Timer1A_Wait1ms(5);
+  Timer0A_Wait1ms(5);
   LCD_nibble_write(0x30, 0);
-  Timer1A_Wait1ms(1);
+  Timer0A_Wait1ms(1);
   LCD_nibble_write(0x30, 0);
-  Timer1A_Wait1ms(1);
+  Timer0A_Wait1ms(1);
 
   LCD_nibble_write(0x20, 0);  // use 4-bit data mode
-  Timer1A_Wait1ms(1);
+  Timer0A_Wait1ms(1);
   LCD_command(0x28);          // set 4-bit data, 2-line, 5x7 font
   LCD_command(0x06);          // move cursor right
   LCD_command(0x01);          // clear screen, move cursor to home
@@ -95,9 +95,9 @@ void LCD_command( uint8_t command ) {
   EndCritical( intStatus );
 
   if (command < 4)
-    Timer1A_Wait1ms(2);         // command 1 and 2 needs up to 1.64ms
+    Timer0A_Wait1ms(2);         // command 1 and 2 needs up to 1.64ms
   else
-    Timer1A_Wait1ms(1);         // all others 40 us
+    Timer0A_Wait1ms(1);         // all others 40 us
 
   return;
 }
@@ -109,7 +109,7 @@ void LCD_data( uint8_t data ) {
   LCD_nibble_write(data << 4, RS);        // then lower nibble
   EndCritical( intStatus );
 
-  Timer1A_Wait1ms(1);
+  Timer0A_Wait1ms(1);
 
   return;
 }

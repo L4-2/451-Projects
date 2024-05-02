@@ -33,9 +33,9 @@
 #include "Timer3A.h"
 #include "tm4c123gh6pm.h"
 
-uint32_t Slicecount = 0;
+volatile uint32_t Slicecount = 0;
 
-uint32_t TIN;
+volatile uint32_t TIN = 0;
 
 // function definitions in OSasm.s
 void OS_DisableInterrupts(void); // Disable interrupts
@@ -83,17 +83,21 @@ void OS_Init(void){
   // initialize 7SDisplay
   sevenseg_init();
 
-  //const static unsigned char digitPattern[] = {0xC0, 0xF9, 0xA4, 0xB0, 0x99, 0x92, 0x82, 0xF8, 0x80, 0x90};
-  // uint32_t i;
+//  const static unsigned char digitPattern[] = {0xC0, 0xF9, 0xA4, 0xB0, 0x99, 0x92, 0x82, 0xF8, 0x80, 0x90};
+//
+//  SSI2_write(digitPattern[1], 0x80);
+//  SSI2_write(0x08, 0x80);
+//
+//  SSI2_write(digitPattern[2], 0x80);
+//  SSI2_write(0x04, 0x80);
+//
+//  SSI2_write(digitPattern[3], 0x80);
+//  SSI2_write(0x02, 0x80);
+//
+//  SSI2_write(digitPattern[4], 0x80);
+//  SSI2_write(0x01, 0x80);
 
-
-  // // test loop for 7-segment display
-  // while(1) {
-  //   SSI2_write(digitPattern[i], 0x80);
-  //   Timer1A_Wait(80000); // 1 sec
-  //   i = (i + 1) % 10;
-  // }
-
+  // displayDigit(0, 0);
 
 }
 
@@ -132,6 +136,11 @@ int OS_AddThreads(void(*task0)(void),
   SetInitialStack(1); Stacks[1][STACKSIZE-2] = (int32_t)(task1); // PC
   SetInitialStack(2); Stacks[2][STACKSIZE-2] = (int32_t)(task2); // PC
   RunPt = &tcbs[0];       // thread 0 will run first
+
+  tcbs[0].TIN = 0;
+  tcbs[1].TIN = 1;
+  tcbs[2].TIN = 2;
+  
   EndCritical(status);
   return 1;               // successful
 }
